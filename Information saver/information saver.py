@@ -1,8 +1,8 @@
+from audioop import add
 import re
 
-email_dict = {}
+email_password_dict = {}
 phone_dict = {}
-password_dict = {}
 
 def save_to_file(filename, dictionary):
     with open(filename, 'w') as f:
@@ -14,7 +14,7 @@ def load_from_file(filename, dictionary):
         with open(filename, 'r') as f:
             for line in f:
                 key, value = line.strip().split(',')
-                dictionary[key] = bool(value)  # Convert string to boolean
+                dictionary[key] = value
     except FileNotFoundError:
         pass
 
@@ -43,40 +43,33 @@ def email():
         Email = input("Enter your email: ")
         
         if validate_email(Email):
-            if Email in email_dict:
+            if Email in email_password_dict:
                 print("Email '{}' already exists! Please enter a different one.".format(Email))
             else:
-                email_dict[Email] = True
-                print("Email added successfully!")
+                email_password_dict[Email] = input("Enter your password: ")
+                print("Email and password added successfully!")
                 break
         else:
             print("Invalid email format. Please try again.")
 
-def password():
-    while True:
-        password = input('Enter your password: ')
-
-        if len(password) < 8:
-            print("Password must be at least 8 characters long. Please try again.")
-        else:
-            if password in password_dict:
-                print("Password already exists! Please enter a different one.")
-            else:
-                password_dict[password] = True
-                print("Password added successfully!")
-                break
-
 # Load existing data from files
-load_from_file("emails.txt", email_dict)
+load_from_file("emails.txt", email_password_dict)
 load_from_file("phones.txt", phone_dict)
-load_from_file("passwords.txt", password_dict)
 
 # Call functions
-email()
-phoneNumbers()
-password()
+print('Welcome to the registration form!\n')
+print('If u Want to save your Email and password Type : Email\n')
+print('If u  want to save phone number Type: Phone\n')
+order = input( )
+if order == 'Email':
+    email()
+elif order == 'Phone':
+    phoneNumbers()
+else:
+    print('Please enter a valid order')
+
+
 
 # Save data to files
-save_to_file("emails.txt", email_dict)
+save_to_file("emails.txt", email_password_dict)
 save_to_file("phones.txt", phone_dict)
-save_to_file("passwords.txt", password_dict)
